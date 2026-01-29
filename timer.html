@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bảng Chấm Công</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            min-height: 100vh;
+            padding: 20px 12px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+        }
+
+        .header small {
+            display: block;
+            margin-top: 6px;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .control-panel {
+            padding: 24px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 18px;
+            align-items: center;
+        }
+
+        .row label {
+            min-width: 100px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            transition: all 0.2s ease;
+            min-height: 46px;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            min-height: 46px;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px 10px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            font-size: 15px;
+        }
+
+        th {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tr:hover {
+            background: #eff6ff;
+        }
+
+        .hours {
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .total-section {
+            padding: 28px 24px;
+            background: #f0f9ff;
+            border-top: 1px solid #bfdbfe;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .total-section strong {
+            color: #ec4899;
+            font-size: 1.45rem;
+        }
+
+        /* TOAST */
+        #toast-container {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-width: 400px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 340px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+            color: #1e293b;
+            font-size: 15.5px;
+            font-weight: 500;
+            transform: translateX(140%);
+            opacity: 0;
+            transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success { border-left: 6px solid #10b981; }
+        .toast.error   { border-left: 6px solid #ef4444; }
+        .toast.info    { border-left: 6px solid #3b82f6; }
+        .toast.warning { border-left: 6px solid #f59e0b; }
+
+        .toast-icon { font-size: 26px; line-height: 1; }
+        .toast.success .toast-icon { color: #10b981; }
+        .toast.error   .toast-icon { color: #ef4444; }
+        .toast.info    .toast-icon { color: #3b82f6; }
+        .toast.warning .toast-icon { color: #f59e0b; }
+
+        .toast-message { flex: 1; }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+
+        .toast-close:hover { color: #1e293b; }
+
+        @media (max-width: 640px) {
+            .row { flex-direction: column; align-items: stretch; }
+            .row label { min-width: auto; }
+            #toast-container { bottom: 16px; right: 16px; left: 16px; max-width: none; }
+            .toast { min-width: auto; }
+            th, td { padding: 12px 8px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>BẢNG CHẤM CÔNG</h2>
+        <small>Quản lý giờ làm & tính lương tự động</small>
+    </div>
+
+    <div class="control-panel">
+        <div class="row">
+            <label>Nhân viên:</label>
+            <select id="employeeSelect" onchange="onEmployeeChange()"></select>
+            <button class="btn-primary" onclick="addEmployee()"> Thêm</button>
+            <button class="btn-danger" onclick="removeEmployee()"> Xóa</button>
+        </div>
+
+        <div class="row">
+            <label>Lương/giờ:</label>
+            <select id="salary">
+                <option value="23000">23.000 đ/giờ</option>
+                <option value="25000">25.000 đ/giờ</option>
+                <option value="28000">28.000 đ/giờ</option>
+                <option value="30000">30.000 đ/giờ</option>
+                <option value="33000">33.000 đ/giờ</option>
+                <option value="35000">35.000 đ/giờ</option>
+                <option value="38000">38.000 đ/giờ</option>
+                <option value="40000">40.000 đ/giờ</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <label>Thời gian:</label>
+            <select id="month" onchange="createTable()"></select>
+            <select id="year" onchange="createTable()"></select>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ngày</th>
+                <th>Giờ vào</th>
+                <th>Giờ ra</th>
+                <th>Giờ làm</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <div class="total-section">
+        <div>Tổng giờ làm: <strong><span id="totalHours">0.00</span> giờ</strong></div>
+        <div style="margin-top: 12px;">Tổng lương: <strong><span id="totalSalary">0</span> ₫</strong></div>
+    </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<script src="script.js"></script>
+<script>
+// Đảm bảo hàm showToast luôn có (dùng trong script.js)
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    let icon = 'ℹ';
+    if (type === 'success') icon = '';
+    if (type === 'error')   icon = '';
+    if (type === 'warning') icon = '';
+    
+    toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <span class="toast-message">${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    container.appendChild(toast);
+    setTimeout(() => toast.classList.add('show'), 50);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 450);
+    }, 3800);
+}
+</script>
+
+</body>
+</html>
