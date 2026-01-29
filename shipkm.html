@@ -1,337 +1,262 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bling Coffee • Tính Ship NV (trên 150k)</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-    :root {
-      --primary: #d35400;
-      --primary-dark: #a94400;
-      --bg: #f8f1e9;
-      --card: #ffffff;
-      --text: #2c3e50;
-      --gray: #7f8c8d;
-      --success: #27ae60;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bling Coffee Ship</title>
+    <style>
+        :root {
+            --primary: #8d6e63; /* Màu cà phê nhẹ */
+            --accent: #d35400;
+            --bg: #fafafa;
+            --text: #333;
+            --border: #eee;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 20px 15px;
+            line-height: 1.6;
+        }
 
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, var(--bg), #f0e4d9);
-      min-height: 100vh;
-      padding: 20px 12px;
-      color: var(--text);
-    }
+        .container {
+            width: 100%;
+            max-width: 400px;
+        }
 
-    .container {
-      max-width: 460px;
-      margin: 0 auto;
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
-    .card {
-      background: var(--card);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      overflow: hidden;
-      backdrop-filter: blur(4px);
-    }
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    .header {
-      background: var(--primary);
-      color: white;
-      padding: 18px 20px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 1.4rem;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
+        .input-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
 
-    .content {
-      padding: 24px 20px;
-    }
+        .field {
+            margin-bottom: 15px;
+        }
 
-    .input-group {
-      margin-bottom: 20px;
-      position: relative;
-    }
+        .field label {
+            display: block;
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 5px;
+        }
 
-    label {
-      position: absolute;
-      top: 12px;
-      left: 16px;
-      font-size: 0.9rem;
-      color: var(--gray);
-      transition: all 0.25s ease;
-      pointer-events: none;
-    }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background: #f9f9f9;
+        }
 
-    input {
-      width: 100%;
-      padding: 18px 16px 8px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      transition: all 0.2s;
-      background: #fdfdfd;
-    }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
 
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.15);
-    }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-    input:not(:placeholder-shown) + label,
-    input:focus + label {
-      top: 6px;
-      font-size: 0.78rem;
-      color: var(--primary);
-    }
+        .btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
 
-    .btn {
-      width: 100%;
-      padding: 16px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 8px;
-    }
+        .result-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+            display: none; /* Ẩn khi chưa có kết quả */
+        }
 
-    .btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
-    }
+        .res-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
 
-    .result {
-      margin: 24px 0;
-      padding: 18px;
-      background: rgba(211, 84, 0, 0.06);
-      border-radius: 12px;
-      border: 1px solid rgba(211, 84, 0, 0.15);
-    }
+        .res-item span {
+            display: block;
+            font-size: 0.75rem;
+            color: #888;
+        }
 
-    .result strong {
-      color: var(--primary);
-      font-weight: 700;
-    }
+        .res-item strong {
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
 
-    .result p {
-      margin: 10px 0;
-      font-size: 1.05rem;
-    }
+        .history-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 30px 0 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    h3 {
-      margin: 32px 0 16px;
-      color: var(--primary);
-      font-size: 1.25rem;
-      text-align: center;
-      position: relative;
-    }
+        .history-list {
+            background: white;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
 
-    h3::after {
-      content: "";
-      width: 60px;
-      height: 3px;
-      background: var(--primary);
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 3px;
-    }
+        .history-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .history {
-      max-height: 340px;
-      overflow-y: auto;
-      padding-right: 6px;
-    }
+        .history-item:last-child { border: none; }
 
-    .history-item {
-      padding: 12px 16px;
-      background: #f9f9f9;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      font-size: 0.92rem;
-      border-left: 4px solid var(--primary);
-      transition: all 0.2s;
-    }
+        .item-info b { color: var(--accent); }
+        .item-time { font-size: 0.7rem; color: #bbb; display: block; }
 
-    .history-item:hover {
-      transform: translateX(4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
-
-    .history-item .time {
-      color: var(--gray);
-      font-size: 0.82rem;
-      margin-bottom: 4px;
-      display: block;
-    }
-
-    .clear-btn {
-      margin-top: 16px;
-      color: #e74c3c;
-      background: none;
-      border: 1px solid #e74c3c;
-      padding: 10px 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s;
-      display: block;
-      margin-left: auto;
-    }
-
-    .clear-btn:hover {
-      background: #e74c3c;
-      color: white;
-    }
-
-    @media (max-width: 500px) {
-      .content { padding: 20px 16px; }
-    }
-  </style>
+        .btn-clear {
+            font-size: 0.7rem;
+            color: #d9534f;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="card">
     <div class="header">
-      <i class="fas fa-motorcycle"></i> Bling Coffee - Ship NV
+        <h1>Bling Coffee</h1>
+        <p style="font-size: 0.8rem; color: #999;">Tính Ship & Ghi Sổ Nhân Viên</p>
     </div>
 
-    <div class="content">
-      <div class="input-group">
-        <input type="number" id="bill" placeholder=" " inputmode="decimal" min="150" step="any"/>
-        <label>Tổng bill (k)</label>
-      </div>
+    <div class="input-card">
+        <div class="field">
+            <label>Tổng hóa đơn (k)</label>
+            <input type="number" id="bill" placeholder="Ví dụ: 150" inputmode="decimal">
+        </div>
+        <div class="field">
+            <label>Quãng đường (km)</label>
+            <input type="number" id="km" placeholder="Ví dụ: 3.5" inputmode="decimal">
+        </div>
+        <button class="btn" onclick="tinhTien()">TÍNH & LƯU SỔ</button>
 
-      <div class="input-group">
-        <input type="number" id="km" placeholder=" " inputmode="decimal" min="0" step="0.1"/>
-        <label>Số km giao</label>
-      </div>
-
-      <button class="btn" onclick="tinhTien()">
-        <i class="fas fa-calculator"></i> Tính & Ghi sổ
-      </button>
-
-      <div class="result" id="result"></div>
-
-      <h3>Lịch sử ghi sổ</h3>
-      <div class="history" id="historyList"></div>
-
-      <button class="clear-btn" onclick="xoaLichSu()">
-        <i class="fas fa-trash-can"></i> Xóa toàn bộ lịch sử
-      </button>
+        <div class="result-box" id="resultBox">
+            <div class="res-item" style="grid-column: span 2;">
+                <span>Khách thanh toán ship</span>
+                <strong id="resKhach">0k</strong>
+            </div>
+            <div class="res-item">
+                <span>Ghi sổ</span>
+                <strong id="resGhiSo" style="color: var(--primary);">0k</strong>
+            </div>
+            <div class="res-item">
+                <span>Tổng ship</span>
+                <strong id="resGoc" style="color: #555;">0k</strong>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="history-title">
+        LỊCH SỬ GẦN ĐÂY
+        <span class="btn-clear" onclick="xoaLichSu()">Xóa hết</span>
+    </div>
+    <div class="history-list" id="historyList"></div>
 </div>
 
 <script>
-  const billInput = document.getElementById("bill");
-  const kmInput = document.getElementById("km");
-  const resultDiv = document.getElementById("result");
-  const historyList = document.getElementById("historyList");
+    function tinhTien() {
+        const bill = parseFloat(document.getElementById('bill').value);
+        const km = parseFloat(document.getElementById('km').value);
 
-  function formatNumber(num) {
-    return num.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  }
+        if (isNaN(bill) || bill < 150 || isNaN(km) || km <= 0) {
+            alert("Vui lòng nhập Bill ≥ 150k và số km hợp lệ!");
+            return;
+        }
 
-  function tinhTien() {
-    const bill = Number(billInput.value);
-    const km = Number(kmInput.value);
+        const ghiSo = bill * 0.07;
+        const shipFull = km * 5;
+        const khachChiu = Math.max(shipFull - ghiSo, 0);
 
-    if (!bill || bill < 150 || !km || km <= 0) {
-      resultDiv.innerHTML = `<p style="color:#c0392b">Vui lòng nhập bill ≥ 150k và km hợp lệ!</p>`;
-      return;
+        // Hiển thị kết quả
+        document.getElementById('resultBox').style.display = 'grid';
+        document.getElementById('resKhach').innerText = khachChiu.toFixed(1) + "k";
+        document.getElementById('resGhiSo').innerText = ghiSo.toFixed(1) + "k";
+        document.getElementById('resGoc').innerText = shipFull.toFixed(1) + "k";
+
+        // Lưu lịch sử
+        const history = JSON.parse(localStorage.getItem("blingShip") || "[]");
+        history.unshift({
+            time: new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}),
+            bill: bill,
+            khach: khachChiu
+        });
+        localStorage.setItem("blingShip", JSON.stringify(history.slice(0, 10)));
+        loadHistory();
     }
 
-    const ghiSo = bill * 0.07;
-    const shipFull = km * 5;
-    const khachChiu = Math.max(shipFull - ghiSo, 0);
+    function loadHistory() {
+        const history = JSON.parse(localStorage.getItem("blingShip") || "[]");
+        const list = document.getElementById('historyList');
+        list.innerHTML = history.length ? "" : "<p style='padding:15px; font-size:0.8rem; color:#ccc; text-align:center;'>Trống</p>";
 
-    resultDiv.innerHTML = `
-      <p>Tổng bill: <strong>${formatNumber(bill)}k</strong></p>
-      <p>Khách chịu ship: <strong>${formatNumber(khachChiu)}k</strong></p>
-      <p>Ghi sổ cửa hàng: <strong>${formatNumber(ghiSo)}k</strong></p>
-    `;
+        history.forEach(item => {
+            list.innerHTML += `
+                <div class="history-item">
+                    <div class="item-info">
+                        Bill <b>${item.bill}k</b> → Khách trả <b>${item.khach.toFixed(1)}k</b>
+                        <span class="item-time">${item.time}</span>
+                    </div>
+                </div>`;
+        });
+    }
 
-    // Lưu lịch sử
-    const history = JSON.parse(localStorage.getItem("shipHistory") || "[]");
-    history.unshift({
-      time: new Date().toLocaleString('vi-VN'),
-      bill,
-      khachChiu,
-      ghiSo,
-      km
-    });
-    localStorage.setItem("shipHistory", JSON.stringify(history.slice(0, 100))); // giới hạn 100 dòng
+    function xoaLichSu() {
+        if (confirm("Xóa lịch sử?")) {
+            localStorage.removeItem("blingShip");
+            loadHistory();
+        }
+    }
 
+    // Load khi mở trang
     loadHistory();
-    
-    // Reset form (tùy chọn)
-    // billInput.value = "";
-    // kmInput.value = "";
-  }
-
-  function loadHistory() {
-    const history = JSON.parse(localStorage.getItem("shipHistory") || "[]");
-    historyList.innerHTML = "";
-
-    if (history.length === 0) {
-      historyList.innerHTML = '<p style="text-align:center;color:#95a5a6;font-style:italic;">Chưa có lịch sử</p>';
-      return;
-    }
-
-    history.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "history-item";
-      div.innerHTML = `
-        <span class="time">${item.time}</span>
-        Bill <strong>${formatNumber(item.bill)}k</strong> • 
-        Khách <strong>${formatNumber(item.khachChiu)}k</strong> • 
-        Ghi sổ <strong>${formatNumber(item.ghiSo)}k</strong>
-        <small style="color:#95a5a6">(${formatNumber(item.km)}km)</small>
-      `;
-      historyList.appendChild(div);
-    });
-  }
-
-  function xoaLichSu() {
-    if (confirm("Xóa toàn bộ lịch sử ghi sổ?")) {
-      localStorage.removeItem("shipHistory");
-      loadHistory();
-      resultDiv.innerHTML = "";
-    }
-  }
-
-  // Tự động load lịch sử khi mở trang
-  loadHistory();
-
-  // Cho phép nhấn Enter để tính
-  document.addEventListener("keydown", e => {
-    if (e.key === "Enter") tinhTien();
-  });
 </script>
+
 </body>
 </html>

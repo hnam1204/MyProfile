@@ -1,325 +1,254 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Bảng Chấm Công</title>
-
+    <meta charset="UTF-8">
+    <title>Chấm Công Auto</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        :root { --primary: #4a90e2; --success: #27ae60; --bg: #f0f2f5; --text: #2c3e50; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 950px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        h2 { text-align: center; color: var(--primary); margin-bottom: 20px; }
 
-        body {
-            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            min-height: 100vh;
-            padding: 20px 12px;
-            color: #1e293b;
-        }
+        /* Khối điều khiển & Sao lưu */
+        .control-panel { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e9ecef; }
+        .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+        
+        .backup-zone { border-top: 1px solid #ddd; padding-top: 15px; margin-top: 10px; display: flex; gap: 10px; }
+        
+        input, select { padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--primary); background: #f0f7ff; }
 
-        .container {
-            max-width: 1150px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
+        button { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; color: white; }
+        .btn-add { background: var(--primary); }
+        .btn-export { background: #607d8b; }
+        .btn-import { background: #ff9800; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        .header {
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
-            color: white;
-            padding: 24px 20px;
-            text-align: center;
-        }
+        /* Bảng chấm công */
+        #attendanceArea { display: none; opacity: 0; transform: translateY(10px); transition: 0.4s ease-out; }
+        #attendanceArea.active { display: block; opacity: 1; transform: translateY(0); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { padding: 12px; font-size: 13px; color: #7f8c8d; border-bottom: 2px solid #eee; text-transform: uppercase; }
+        tr:focus-within { background-color: #e3f2fd !important; }
+        td { padding: 8px; border-bottom: 1px solid #f8f8f8; text-align: center; }
 
-        .header h2 {
-            margin: 0;
-            font-size: 1.9rem;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-        }
-
-        .header small {
-            display: block;
-            margin-top: 6px;
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-
-        .control-panel {
-            padding: 24px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            margin-bottom: 18px;
-            align-items: center;
-        }
-
-        .row label {
-            min-width: 100px;
-            font-weight: 600;
-            color: #334155;
-        }
-
-        select, input[type="text"], input[type="number"] {
-            flex: 1;
-            padding: 12px 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-            transition: all 0.2s ease;
-            min-height: 46px;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-        }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            min-height: 46px;
-        }
-
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 14px 10px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-            font-size: 15px;
-        }
-
-        th {
-            background: linear-gradient(90deg, #1e40af, #3b82f6);
-            color: white;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-
-        tr:nth-child(even) {
-            background: #f8fafc;
-        }
-
-        tr:hover {
-            background: #eff6ff;
-        }
-
-        .hours {
-            font-weight: 600;
-            color: #1e40af;
-        }
-
-        .total-section {
-            padding: 28px 24px;
-            background: #f0f9ff;
-            border-top: 1px solid #bfdbfe;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-
-        .total-section strong {
-            color: #ec4899;
-            font-size: 1.45rem;
-        }
-
-        /* TOAST */
-        #toast-container {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-width: 400px;
-        }
-
-        .toast {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            min-width: 340px;
-            padding: 16px 20px;
-            border-radius: 12px;
-            background: white;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
-            color: #1e293b;
-            font-size: 15.5px;
-            font-weight: 500;
-            transform: translateX(140%);
-            opacity: 0;
-            transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .toast.show {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
-        .toast.success { border-left: 6px solid #10b981; }
-        .toast.error   { border-left: 6px solid #ef4444; }
-        .toast.info    { border-left: 6px solid #3b82f6; }
-        .toast.warning { border-left: 6px solid #f59e0b; }
-
-        .toast-icon { font-size: 26px; line-height: 1; }
-        .toast.success .toast-icon { color: #10b981; }
-        .toast.error   .toast-icon { color: #ef4444; }
-        .toast.info    .toast-icon { color: #3b82f6; }
-        .toast.warning .toast-icon { color: #f59e0b; }
-
-        .toast-message { flex: 1; }
-
-        .toast-close {
-            background: none;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            color: #64748b;
-            transition: color 0.2s;
-        }
-
-        .toast-close:hover { color: #1e293b; }
-
-        @media (max-width: 640px) {
-            .row { flex-direction: column; align-items: stretch; }
-            .row label { min-width: auto; }
-            #toast-container { bottom: 16px; right: 16px; left: 16px; max-width: none; }
-            .toast { min-width: auto; }
-            th, td { padding: 12px 8px; font-size: 14px; }
-        }
+        .input-time { width: 65px; text-align: center; font-weight: bold; border: 1px solid #eee; background: #fafafa; }
+        .summary { margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #4a90e2, #357abd); color: white; border-radius: 12px; display: flex; justify-content: space-around; }
+        .total-val { font-size: 1.5em; font-weight: bold; display: block; }
+        .label { font-size: 0.8em; opacity: 0.8; }
+        
+        .status-msg { font-size: 12px; color: #27ae60; font-style: italic; margin-left: auto; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h2>BẢNG CHẤM CÔNG</h2>
-        <small>Quản lý giờ làm & tính lương tự động</small>
-    </div>
+    <h2>BẢNG CHẤM CÔNG BLING COFFEE</h2>
 
     <div class="control-panel">
         <div class="row">
-            <label>Nhân viên:</label>
-            <select id="employeeSelect" onchange="onEmployeeChange()"></select>
-            <button class="btn-primary" onclick="addEmployee()"> Thêm</button>
-            <button class="btn-danger" onclick="removeEmployee()"> Xóa</button>
-        </div>
-
-        <div class="row">
-            <label>Lương/giờ:</label>
-            <select id="salary">
-                <option value="23000">23.000 đ/giờ</option>
-                <option value="25000">25.000 đ/giờ</option>
-                <option value="28000">28.000 đ/giờ</option>
-                <option value="30000">30.000 đ/giờ</option>
-                <option value="33000">33.000 đ/giờ</option>
-                <option value="35000">35.000 đ/giờ</option>
-                <option value="38000">38.000 đ/giờ</option>
-                <option value="40000">40.000 đ/giờ</option>
+            <input type="text" id="newEmpName" placeholder="Tên nhân viên mới...">
+            <select id="salaryGrade">
+                <option value="23000">Bậc 23</option>
+                <option value="25000">Bậc 25</option>
+                <option value="28000" selected>Bậc 28</option>
+                <option value="30000">Bậc 30</option>
+                <option value="33000">Bậc 33</option>
+                <option value="35000">Bậc 35</option>
+                <option value="38000">Bậc 38</option>
             </select>
+            <button class="btn-add" onclick="addNewEmployee()">+ THÊM NHÂN VIÊN</button>
+            <span id="saveStatus" class="status-msg">Đã lưu tự động</span>
         </div>
 
-        <div class="row">
-            <label>Thời gian:</label>
-            <select id="month" onchange="createTable()"></select>
-            <select id="year" onchange="createTable()"></select>
+        <div class="backup-zone">
+            <button class="btn-export" onclick="exportData()">💾 XUẤT FILE SAO LƯU (.JSON)</button>
+            <button class="btn-import" onclick="document.getElementById('fileInput').click()">📂 NHẬP FILE DỮ LIỆU</button>
+            <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importData(event)">
         </div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Ngày</th>
-                <th>Giờ vào</th>
-                <th>Giờ ra</th>
-                <th>Giờ làm</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-    </table>
+    <div class="row" style="justify-content: center; background: white; padding: 10px; border-radius: 10px;">
+        <span>Chọn nhân viên:</span>
+        <select id="currentEmp" onchange="handleEmpChange()"></select>
+        <input type="month" id="currentMonth" onchange="loadAttendance()">
+    </div>
 
-    <div class="total-section">
-        <div>Tổng giờ làm: <strong><span id="totalHours">0.00</span> giờ</strong></div>
-        <div style="margin-top: 12px;">Tổng lương: <strong><span id="totalSalary">0</span> ₫</strong></div>
+    <div id="attendanceArea">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ngày</th>
+                    <th>Vào</th>
+                    <th>Ra</th>
+                    <th>+3k/h</th>
+                    <th>Lễ x3</th>
+                    <th>Số Giờ</th>
+                    <th>Tiền</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <div class="summary">
+            <div style="text-align:center">
+                <span class="label">TỔNG GIỜ LÀM</span>
+                <span class="total-val" id="totalH">0</span>
+            </div>
+            <div style="text-align:center">
+                <span class="label">TỔNG LƯƠNG NHẬN</span>
+                <span class="total-val" id="totalS">0</span>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Toast container -->
-<div id="toast-container"></div>
-
-<script src="script.js"></script>
 <script>
-// Đảm bảo hàm showToast luôn có (dùng trong script.js)
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    let icon = 'ℹ';
-    if (type === 'success') icon = '';
-    if (type === 'error')   icon = '';
-    if (type === 'warning') icon = '';
-    
-    toast.innerHTML = `
-        <span class="toast-icon">${icon}</span>
-        <span class="toast-message">${message}</span>
-        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-    `;
-    
-    container.appendChild(toast);
-    setTimeout(() => toast.classList.add('show'), 50);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 450);
-    }, 3800);
-}
-</script>
+    // 1. KHỞI TẠO VÀ SAO LƯU TỰ ĐỘNG
+    let appData = JSON.parse(localStorage.getItem('MasterWorkData')) || { employees: [] };
+    document.getElementById('currentMonth').value = new Date().toISOString().slice(0, 7);
 
+    function autoSave() {
+        localStorage.setItem('MasterWorkData', JSON.stringify(appData));
+        const status = document.getElementById('saveStatus');
+        status.innerText = "Đang lưu...";
+        setTimeout(() => status.innerText = "Đã lưu tự động", 500);
+    }
+
+    // 2. XỬ LÝ NHÂN VIÊN
+    function addNewEmployee() {
+        const name = document.getElementById('newEmpName').value.trim();
+        const rate = document.getElementById('salaryGrade').value;
+        if(!name) return;
+        const newId = 'id' + Date.now();
+        appData.employees.push({ id: newId, name: name, rate: parseInt(rate), logs: {} });
+        autoSave();
+        renderEmpDropdown(newId);
+        handleEmpChange();
+        document.getElementById('newEmpName').value = "";
+    }
+
+    function renderEmpDropdown(selectedId = null) {
+        const select = document.getElementById('currentEmp');
+        select.innerHTML = '<option value="">-- Chọn nhân viên --</option>' + 
+            appData.employees.map(e => `<option value="${e.id}" ${e.id===selectedId?'selected':''}>${e.name} (${e.rate/1000}k)</option>`).join('');
+    }
+
+    function handleEmpChange() {
+        const area = document.getElementById('attendanceArea');
+        if (document.getElementById('currentEmp').value) {
+            area.style.display = 'block';
+            setTimeout(() => area.classList.add('active'), 50);
+            loadAttendance();
+        } else {
+            area.classList.remove('active');
+            setTimeout(() => area.style.display = 'none', 400);
+        }
+    }
+
+    // 3. LOGIC NHẬP GIỜ VÀ TÍNH TOÁN
+    function formatTime(val) {
+        val = val.replace(/\D/g, '');
+        if (!val) return "";
+        let hh, mm;
+        if (val.length <= 2) { hh = val.padStart(2, '0'); mm = "00"; }
+        else if (val.length === 3) { hh = val.substring(0, 1).padStart(2, '0'); mm = val.substring(1, 3); }
+        else { hh = val.substring(0, 2); mm = val.substring(2, 4); }
+        return `${hh.slice(0,2)}:${mm.slice(0,2)}`;
+    }
+
+    function updateData(date, field, val) {
+        const empId = document.getElementById('currentEmp').value;
+        const emp = appData.employees.find(e => e.id === empId);
+        if (field === 'in' || field === 'out') val = formatTime(val);
+        if (!emp.logs[date]) emp.logs[date] = { in: '', out: '', x3: false, bonus3k: false };
+        emp.logs[date][field] = val;
+        autoSave();
+        loadAttendance(false); 
+    }
+
+    function loadAttendance(isFull = true) {
+        const empId = document.getElementById('currentEmp').value;
+        const monthStr = document.getElementById('currentMonth').value;
+        const emp = appData.employees.find(e => e.id === empId);
+        if (!emp) return;
+
+        const [yr, mt] = monthStr.split('-').map(Number);
+        const days = new Date(yr, mt, 0).getDate();
+        let totalH = 0, totalS = 0;
+
+        if (isFull) {
+            let html = '';
+            for (let i = 1; i <= days; i++) {
+                const dateKey = `${monthStr}-${i.toString().padStart(2,'0')}`;
+                const log = emp.logs[dateKey] || { in: '', out: '', x3: false, bonus3k: false };
+                html += `<tr id="row-${dateKey}">
+                    <td style="color:#95a5a6">${i}/${mt}</td>
+                    <td><input class="input-time" type="text" value="${log.in}" onblur="updateData('${dateKey}','in', this.value)"></td>
+                    <td><input class="input-time" type="text" value="${log.out}" onblur="updateData('${dateKey}','out', this.value)"></td>
+                    <td><input type="checkbox" ${log.bonus3k?'checked':''} onchange="updateData('${dateKey}','bonus3k', this.checked)"></td>
+                    <td><input type="checkbox" ${log.x3?'checked':''} onchange="updateData('${dateKey}','x3', this.checked)"></td>
+                    <td class="h-cell">-</td><td class="s-cell" style="font-weight:bold; color:var(--primary)">-</td>
+                </tr>`;
+            }
+            document.getElementById('tableBody').innerHTML = html;
+        }
+
+        for (let i = 1; i <= days; i++) {
+            const dateKey = `${monthStr}-${i.toString().padStart(2,'0')}`;
+            const log = emp.logs[dateKey] || { in: '', out: '', x3: false, bonus3k: false };
+            const row = document.getElementById(`row-${dateKey}`);
+            let h = 0;
+            if (log.in && log.out) {
+                let [h1, m1] = log.in.split(':').map(Number);
+                let [h2, m2] = log.out.split(':').map(Number);
+                let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+                if (diff < 0) diff += 1440;
+                h = diff / 60;
+            }
+            const money = h * (log.bonus3k ? emp.rate + 3000 : emp.rate) * (log.x3 ? 3 : 1);
+            totalH += h; totalS += money;
+            row.querySelector('.h-cell').innerText = h > 0 ? h.toFixed(2) : '-';
+            row.querySelector('.s-cell').innerText = money > 0 ? Math.round(money).toLocaleString() : '-';
+        }
+        document.getElementById('totalH').innerText = totalH.toFixed(2);
+        document.getElementById('totalS').innerText = Math.round(totalS).toLocaleString();
+    }
+
+    // 4. CHỨC NĂNG SAO LƯU FILE (BACKUP & RESTORE)
+    function exportData() {
+        const blob = new Blob([JSON.stringify(appData)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `SAO_LUU_CHAM_CONG_${new Date().toLocaleDateString()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.employees) {
+                    appData = data;
+                    autoSave();
+                    renderEmpDropdown();
+                    alert(" Đã cập nhật lại toàn bộ thông tin giờ làm từ file!");
+                }
+            } catch (err) {
+                alert("File không đúng định dạng!");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    renderEmpDropdown();
+</script>
 </body>
 </html>

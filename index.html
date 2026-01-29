@@ -3,213 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hnam</title>
+    <title>hnam - Projects</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
         }
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .profile-card {
-            background: white;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            position: relative;
-            animation: slideIn 0.6s ease-out;
-            margin-bottom: 2rem;
-        }
+        .container { width: 100%; max-width: 500px; }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cover-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cover-image::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.1)"/></svg>') no-repeat bottom;
-            background-size: cover;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: white;
-            position: absolute;
-            top: 125px;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            overflow: hidden;
-        }
-
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .status-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 90px;
-            padding: 1rem;
-        }
-
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.85rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            background: #f0f0f0;
-        }
-
-        .status.online {
-            color: #22c55e;
-        }
-
-        .status.offline {
-            color: #ef4444;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .profile-info {
-            text-align: center;
-            padding: 1.5rem 2rem;
-        }
-
-        .profile-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 0.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .verified {
-            color: #1da1f2;
-            font-size: 1.2rem;
-        }
-
-        .profile-title {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .profile-details {
-            color: #999;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-location {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #f5f5f5;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            padding: 1.5rem;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .social-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .social-icon:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-3px);
-        }
-
-        .contact-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            width: calc(100% - 4rem);
-            margin: 0 2rem 2rem;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-        }
-
-        .contact-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Projects Panel */
@@ -218,7 +30,6 @@
             border-radius: 30px;
             padding: 2rem;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            width: 100%;
             animation: slideIn 0.6s ease-out;
         }
 
@@ -226,200 +37,136 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid #f0f0f0;
         }
 
-        .projects-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1a1a1a;
-        }
+        .projects-title { font-size: 1.5rem; font-weight: 700; color: #1a1a1a; }
 
         .project-count {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #f0f2f5;
+            color: #667eea;
             padding: 0.4rem 1rem;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
         }
 
+        /* Project Item */
         .project-item {
             background: #f8f9fa;
-            border-radius: 15px;
-            padding: 1.5rem;
+            border-radius: 18px;
+            padding: 1.2rem;
             margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
             text-decoration: none;
             color: inherit;
             display: block;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
         }
 
         .project-item:hover {
             background: white;
             border-color: #667eea;
-            transform: translateX(5px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transform: translateX(8px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
         }
 
         .project-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.8rem;
+            align-items: center;
+            gap: 1rem;
         }
 
         .project-icon {
-            width: 50px;
-            height: 50px;
+            width: 48px; height: 48px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem;
+            flex-shrink: 0;
         }
 
-        .project-icon.green {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
+        /* Màu sắc biểu tượng riêng biệt */
+        .project-icon.orange { background: linear-gradient(135deg, #f39c12, #d35400); }
+        .project-icon.green { background: linear-gradient(135deg, #27ae60, #1e8449); }
 
-        .project-icon.orange {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        }
+        .project-info { flex: 1; }
 
-        .project-icon.pink {
-            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-        }
+        .project-name { font-size: 1.05rem; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
 
-        .project-info {
-            flex: 1;
-            padding: 0 1rem;
-        }
-
-        .project-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 0.3rem;
-        }
-
-        .project-desc {
-            font-size: 0.9rem;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .project-status {
-            font-size: 0.8rem;
-            color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            padding: 0.3rem 0.8rem;
-            border-radius: 12px;
-            font-weight: 500;
-        }
-
-        .project-status.progress {
-            color: #f59e0b;
-            background: rgba(245, 158, 11, 0.1);
-        }
+        .project-desc { font-size: 0.85rem; color: #7f8c8d; line-height: 1.4; }
 
         .project-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 0.8rem;
+            display: flex; gap: 0.4rem;
+            margin-top: 0.8rem; padding-top: 0.8rem;
+            border-top: 1px dashed #ddd;
         }
 
         .tag {
-            font-size: 0.75rem;
-            padding: 0.3rem 0.7rem;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
             background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
+            border: 1px solid #eee;
+            border-radius: 8px;
             color: #666;
+            text-transform: uppercase;
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            body {
-                padding: 1rem;
-            }
-
-            .container {
-                max-width: 100%;
-            }
-
-            .profile-card {
-                border-radius: 20px;
-            }
-
-            .projects-panel {
-                border-radius: 20px;
-                padding: 1.5rem;
-            }
-
-            .profile-info {
-                padding: 1rem;
-            }
-
-            .social-icons {
-                padding: 1rem;
-                gap: 1rem;
-            }
-
-            .social-icon {
-                width: 40px;
-                height: 40px;
-            }
+        @media (max-width: 480px) {
+            .projects-panel { padding: 1.5rem; }
+            .project-name { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Projects Panel -->
         <div class="projects-panel">
             <div class="projects-header">
                 <h2 class="projects-title">My Projects</h2>
-                <span class="project-count"> hnam </span>
+                <span class="project-count">Design by hnam</span>
             </div>
 
             <a href="shipkm.html" class="project-item">
                 <div class="project-header">
-                    <div class="project-icon">
-                        <i class="fas fa-shopping-cart"></i>
+                    <div class="project-icon green">
+                        <i class="fas fa-motorcycle"></i>
                     </div>
                     <div class="project-info">
                         <div class="project-name">Shipper Bling Coffee</div>
-                        <div class="project-desc">Bảng Tính Km Nhân Viên</div>
+                        <div class="project-desc">Tính KM, trích bill 7% & Ghi sổ lịch sử</div>
                     </div>
-                    <div class="project-status">Hoàn thành</div>
                 </div>
                 <div class="project-tags">
-                    <span class="tag">html</span>
-                    <span class="tag">css</span>
-                    <span class="tag">js</span>
+                    <span class="tag">Calculator</span>
+                    <span class="tag">History</span>
                 </div>
             </a>
+
+            <a href="timer.html" class="project-item">
+                <div class="project-header">
+                    <div class="project-icon orange">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="project-info">
+                        <div class="project-name">Quản Lý Chấm Công</div>
+                        <div class="project-desc">Tính lương, x3 lễ & Backup file</div>
+                    </div>
+                </div>
+                <div class="project-tags">
+                    <span class="tag">Lương Thưởng</span>
+                    <span class="tag">Backup JSON</span>
+                </div>
+            </a>
+        </div>
     </div>
 
     <script>
-        // Animation cho project items khi scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'slideIn 0.6s ease-out';
-                }
-            });
-        });
-
-        document.querySelectorAll('.project-item').forEach(item => {
-            observer.observe(item);
+        // Hiệu ứng xuất hiện mượt mà cho từng item
+        document.querySelectorAll('.project-item').forEach((item, index) => {
+            item.style.animation = `slideIn 0.4s ease-out forwards ${index * 0.15}s`;
+            item.style.opacity = '0';
         });
     </script>
 </body>
