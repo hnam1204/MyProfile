@@ -34,7 +34,7 @@
             display: flex;
             width: fit-content;
             height: 100%;
-            animation: scrollImages 40s linear infinite; /* Tốc độ chạy ảnh */
+            animation: scrollImages 25s linear infinite; /* Tốc độ chạy ảnh */
         }
 
         .bg-img {
@@ -112,7 +112,7 @@
             background: rgba(0, 0, 0, 0.6); padding: 12px 0;
             border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .marquee-content { display: flex; white-space: nowrap; animation: marquee-move 20s linear infinite; }
+        .marquee-content { display: flex; white-space: nowrap; animation: marquee-move 8s linear infinite; }
         .marquee-content span { color: white; font-size: 0.9rem; padding-right: 60px; }
         @keyframes marquee-move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     </style>
