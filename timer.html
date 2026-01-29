@@ -2,44 +2,51 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Chấm Công Auto</title>
+    <title>Bling Coffee - Chốt Lương & Ship</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #4a90e2; --success: #27ae60; --bg: #f0f2f5; --text: #2c3e50; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 950px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        :root { --primary: #002347; --success: #27ae60; --bg: #f0f2f5; --text: #2c3e50; --orange: #f39c12; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        .container { width: 100%; max-width: 1100px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 0 auto; }
         
-        h2 { text-align: center; color: var(--primary); margin-bottom: 20px; }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Khối điều khiển & Sao lưu */
         .control-panel { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e9ecef; }
         .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
         
-        .backup-zone { border-top: 1px solid #ddd; padding-top: 15px; margin-top: 10px; display: flex; gap: 10px; }
-        
         input, select { padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; transition: 0.2s; }
-        input:focus { border-color: var(--primary); background: #f0f7ff; }
-
-        button { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; color: white; }
+        button { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
         .btn-add { background: var(--primary); }
         .btn-export { background: #607d8b; }
         .btn-import { background: #ff9800; }
-        button:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        /* Bảng chấm công */
         #attendanceArea { display: none; opacity: 0; transform: translateY(10px); transition: 0.4s ease-out; }
         #attendanceArea.active { display: block; opacity: 1; transform: translateY(0); }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { padding: 12px; font-size: 13px; color: #7f8c8d; border-bottom: 2px solid #eee; text-transform: uppercase; }
-        tr:focus-within { background-color: #e3f2fd !important; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th { padding: 12px; font-size: 12px; color: #7f8c8d; border-bottom: 2px solid #eee; text-transform: uppercase; background: #fafafa; }
         td { padding: 8px; border-bottom: 1px solid #f8f8f8; text-align: center; }
 
-        .input-time { width: 65px; text-align: center; font-weight: bold; border: 1px solid #eee; background: #fafafa; }
-        .summary { margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #4a90e2, #357abd); color: white; border-radius: 12px; display: flex; justify-content: space-around; }
-        .total-val { font-size: 1.5em; font-weight: bold; display: block; }
-        .label { font-size: 0.8em; opacity: 0.8; }
+        .input-time { width: 60px; text-align: center; font-weight: bold; border: 1px solid #ddd; border-radius: 4px; }
         
+        .ship-col { display: none; } 
+        .has-ship .ship-col { display: table-cell; } 
+        
+        /* Cho phép nhập text ở ô ship để gõ phép tính */
+        .input-ship { width: 90px; text-align: right; border: 1px solid #ddd; border-radius: 4px; padding: 5px; color: var(--success); font-weight: bold; }
+        .unit-k { font-size: 11px; color: #999; margin-left: 2px; }
+
+        .summary { margin-top: 25px; padding: 25px; background: linear-gradient(135deg, #002347 0%, #004080 100%); color: white; border-radius: 15px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; box-shadow: 0 5px 15px rgba(0,35,71,0.3); }
+        .total-val { font-size: 1.6em; font-weight: bold; display: block; margin-top: 5px; }
+        .label { font-size: 0.85em; opacity: 0.8; text-transform: uppercase; font-weight: 600; }
+        .final-highlight { color: #2ecc71; font-size: 2em; }
+
         .status-msg { font-size: 12px; color: #27ae60; font-style: italic; margin-left: auto; }
+        .ship-toggle { background: #fff; padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+        
+        /* Style cho phần đổi bậc lương nhanh */
+        .rate-changer { font-size: 0.85em; color: var(--primary); font-weight: bold; border: 1px dashed var(--primary); background: #f0f7ff; }
     </style>
 </head>
 <body>
@@ -64,20 +71,37 @@
         </div>
 
         <div class="backup-zone">
-            <button class="btn-export" onclick="exportData()">💾 XUẤT FILE SAO LƯU (.JSON)</button>
-            <button class="btn-import" onclick="document.getElementById('fileInput').click()">📂 NHẬP FILE DỮ LIỆU</button>
+            <button class="btn-export" onclick="exportData()">💾 SAO LƯU (.JSON)</button>
+            <button class="btn-import" onclick="document.getElementById('fileInput').click()">📂 NHẬP DỮ LIỆU</button>
             <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importData(event)">
         </div>
     </div>
 
-    <div class="row" style="justify-content: center; background: white; padding: 10px; border-radius: 10px;">
-        <span>Chọn nhân viên:</span>
+    <div class="row" style="justify-content: center; background: white; padding: 12px; border-radius: 12px; border: 1px solid #eee;">
+        <span>Nhân viên:</span>
         <select id="currentEmp" onchange="handleEmpChange()"></select>
-        <input type="month" id="currentMonth" onchange="loadAttendance()">
+        
+        <span id="rateLabel" style="margin-left: 15px; display:none">Bậc lương hiện tại: 
+            <select id="changeRate" class="rate-changer" onchange="updateEmployeeRate(this.value)">
+                <option value="23000">23k</option>
+                <option value="25000">25k</option>
+                <option value="28000">28k</option>
+                <option value="30000">30k</option>
+                <option value="33000">33k</option>
+                <option value="35000">35k</option>
+                <option value="38000">38k</option>
+            </select>
+        </span>
+
+        <input type="month" id="currentMonth" onchange="loadAttendance()" style="margin-left: 15px;">
+        
+        <label id="toggleBox" class="ship-toggle" style="display:none; margin-left: 15px;">
+            <input type="checkbox" id="isShipper" onchange="toggleShipMode(this.checked)"> Chạy Ship
+        </label>
     </div>
 
     <div id="attendanceArea">
-        <table>
+        <table id="mainTable">
             <thead>
                 <tr>
                     <th>Ngày</th>
@@ -86,7 +110,8 @@
                     <th>+3k/h</th>
                     <th>Lễ x3</th>
                     <th>Số Giờ</th>
-                    <th>Tiền</th>
+                    <th>Lương</th>
+                    <th class="ship-col" style="background: #fff8e1; color: #f57c00;">Tiền Ship (k)</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>
@@ -94,19 +119,26 @@
 
         <div class="summary">
             <div style="text-align:center">
-                <span class="label">TỔNG GIỜ LÀM</span>
+                <span class="label">Tổng Giờ Làm</span>
                 <span class="total-val" id="totalH">0</span>
             </div>
             <div style="text-align:center">
-                <span class="label">TỔNG LƯƠNG NHẬN</span>
+                <span class="label">Lương Giờ</span>
                 <span class="total-val" id="totalS">0</span>
+            </div>
+            <div class="ship-col" style="text-align:center">
+                <span class="label" style="color: #ffcc80;">Tiền Ship</span>
+                <span class="total-val" id="totalShip" style="color: var(--orange);">0</span>
+            </div>
+            <div style="text-align:center; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 30px;">
+                <span class="label">THỰC NHẬN</span>
+                <span class="total-val final-highlight" id="finalTotal">0</span>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // 1. KHỞI TẠO VÀ SAO LƯU TỰ ĐỘNG
     let appData = JSON.parse(localStorage.getItem('MasterWorkData')) || { employees: [] };
     document.getElementById('currentMonth').value = new Date().toISOString().slice(0, 7);
 
@@ -117,13 +149,12 @@
         setTimeout(() => status.innerText = "Đã lưu tự động", 500);
     }
 
-    // 2. XỬ LÝ NHÂN VIÊN
     function addNewEmployee() {
         const name = document.getElementById('newEmpName').value.trim();
         const rate = document.getElementById('salaryGrade').value;
         if(!name) return;
         const newId = 'id' + Date.now();
-        appData.employees.push({ id: newId, name: name, rate: parseInt(rate), logs: {} });
+        appData.employees.push({ id: newId, name: name, rate: parseInt(rate), isShipper: false, logs: {} });
         autoSave();
         renderEmpDropdown(newId);
         handleEmpChange();
@@ -133,22 +164,60 @@
     function renderEmpDropdown(selectedId = null) {
         const select = document.getElementById('currentEmp');
         select.innerHTML = '<option value="">-- Chọn nhân viên --</option>' + 
-            appData.employees.map(e => `<option value="${e.id}" ${e.id===selectedId?'selected':''}>${e.name} (${e.rate/1000}k)</option>`).join('');
+            appData.employees.map(e => `<option value="${e.id}" ${e.id===selectedId?'selected':''}>${e.name}</option>`).join('');
+    }
+
+    // Cập nhật mức lương cho nhân viên
+    function updateEmployeeRate(newRate) {
+        const empId = document.getElementById('currentEmp').value;
+        const emp = appData.employees.find(e => e.id === empId);
+        if (emp) {
+            emp.rate = parseInt(newRate);
+            autoSave();
+            loadAttendance(); // Tính toán lại toàn bộ bảng lương với mức mới
+        }
     }
 
     function handleEmpChange() {
+        const empId = document.getElementById('currentEmp').value;
         const area = document.getElementById('attendanceArea');
-        if (document.getElementById('currentEmp').value) {
+        const toggleBox = document.getElementById('toggleBox');
+        const rateLabel = document.getElementById('rateLabel');
+        
+        if (empId) {
+            const emp = appData.employees.find(e => e.id === empId);
+            document.getElementById('isShipper').checked = emp.isShipper || false;
+            document.getElementById('changeRate').value = emp.rate; // Hiển thị bậc lương hiện tại
+            
+            toggleBox.style.display = 'flex';
+            rateLabel.style.display = 'inline';
             area.style.display = 'block';
             setTimeout(() => area.classList.add('active'), 50);
+            applyShipUI(emp.isShipper);
             loadAttendance();
         } else {
+            toggleBox.style.display = 'none';
+            rateLabel.style.display = 'none';
             area.classList.remove('active');
             setTimeout(() => area.style.display = 'none', 400);
         }
     }
 
-    // 3. LOGIC NHẬP GIỜ VÀ TÍNH TOÁN
+    function toggleShipMode(checked) {
+        const empId = document.getElementById('currentEmp').value;
+        const emp = appData.employees.find(e => e.id === empId);
+        emp.isShipper = checked;
+        autoSave();
+        applyShipUI(checked);
+        loadAttendance();
+    }
+
+    function applyShipUI(hasShip) {
+        const container = document.getElementById('attendanceArea');
+        if(hasShip) container.classList.add('has-ship');
+        else container.classList.remove('has-ship');
+    }
+
     function formatTime(val) {
         val = val.replace(/\D/g, '');
         if (!val) return "";
@@ -158,16 +227,49 @@
         else { hh = val.substring(0, 2); mm = val.substring(2, 4); }
         return `${hh.slice(0,2)}:${mm.slice(0,2)}`;
     }
-
-    function updateData(date, field, val) {
-        const empId = document.getElementById('currentEmp').value;
-        const emp = appData.employees.find(e => e.id === empId);
-        if (field === 'in' || field === 'out') val = formatTime(val);
-        if (!emp.logs[date]) emp.logs[date] = { in: '', out: '', x3: false, bonus3k: false };
-        emp.logs[date][field] = val;
-        autoSave();
-        loadAttendance(false); 
+// 1. Hàm đánh giá chuỗi nhập vào cho trường ship
+function evaluateShipInput(input) {
+    if (!input) return 0;
+    
+    // Loại bỏ các ký tự lạ, chỉ giữ lại số và các dấu phép tính +, -, *, /
+    // Điều này cho phép bạn nhập cả 20+30 hoặc 10*2...
+    const cleanInput = input.toString().replace(/[^-+*/0-9.]/g, '');
+    
+    try {
+        // Sử dụng Function để tính toán chuỗi toán học một cách an toàn
+        const result = new Function(`return ${cleanInput}`)();
+        
+        // Logic: Nếu kết quả nhỏ hơn 1000, tự hiểu là đơn vị "k" (hàng nghìn)
+        // Ví dụ: 50 + 50 = 100 -> Lưu thành 100,000
+        if (result > 0 && result < 1000) {
+            return result * 1000;
+        }
+        return result || 0;
+    } catch (e) {
+        console.error("Lỗi tính toán ship:", e);
+        return 0;
     }
+}
+
+// 2. Cập nhật hàm updateData để tích hợp bộ tính toán
+function updateData(date, field, val) {
+    const empId = document.getElementById('currentEmp').value;
+    const emp = appData.employees.find(e => e.id === empId);
+    
+    if (field === 'in' || field === 'out') val = formatTime(val);
+    
+    if (!emp.logs[date]) emp.logs[date] = { in: '', out: '', x3: false, bonus3k: false, ship: 0 };
+    
+    // Nếu là trường ship, thực hiện tính toán chuỗi nhập vào
+    if (field === 'ship') {
+        emp.logs[date][field] = evaluateShipInput(val);
+    } else {
+        emp.logs[date][field] = val;
+    }
+    
+    autoSave();
+    loadAttendance(false); // Cập nhật lại giao diện ngay lập tức
+}
 
     function loadAttendance(isFull = true) {
         const empId = document.getElementById('currentEmp').value;
@@ -177,13 +279,15 @@
 
         const [yr, mt] = monthStr.split('-').map(Number);
         const days = new Date(yr, mt, 0).getDate();
-        let totalH = 0, totalS = 0;
+        let totalH = 0, totalS = 0, totalShip = 0;
 
         if (isFull) {
             let html = '';
             for (let i = 1; i <= days; i++) {
                 const dateKey = `${monthStr}-${i.toString().padStart(2,'0')}`;
-                const log = emp.logs[dateKey] || { in: '', out: '', x3: false, bonus3k: false };
+                const log = emp.logs[dateKey] || { in: '', out: '', x3: false, bonus3k: false, ship: 0 };
+                const shipDisplay = log.ship ? log.ship / 1000 : "";
+
                 html += `<tr id="row-${dateKey}">
                     <td style="color:#95a5a6">${i}/${mt}</td>
                     <td><input class="input-time" type="text" value="${log.in}" onblur="updateData('${dateKey}','in', this.value)"></td>
@@ -191,6 +295,7 @@
                     <td><input type="checkbox" ${log.bonus3k?'checked':''} onchange="updateData('${dateKey}','bonus3k', this.checked)"></td>
                     <td><input type="checkbox" ${log.x3?'checked':''} onchange="updateData('${dateKey}','x3', this.checked)"></td>
                     <td class="h-cell">-</td><td class="s-cell" style="font-weight:bold; color:var(--primary)">-</td>
+                    <td class="ship-col"><input class="input-ship" type="text" placeholder="0" value="${shipDisplay}" onblur="updateData('${dateKey}','ship', this.value)"><span class="unit-k">k</span></td>
                 </tr>`;
             }
             document.getElementById('tableBody').innerHTML = html;
@@ -198,7 +303,7 @@
 
         for (let i = 1; i <= days; i++) {
             const dateKey = `${monthStr}-${i.toString().padStart(2,'0')}`;
-            const log = emp.logs[dateKey] || { in: '', out: '', x3: false, bonus3k: false };
+            const log = emp.logs[dateKey] || { in: '', out: '', x3: false, bonus3k: false, ship: 0 };
             const row = document.getElementById(`row-${dateKey}`);
             let h = 0;
             if (log.in && log.out) {
@@ -208,24 +313,30 @@
                 if (diff < 0) diff += 1440;
                 h = diff / 60;
             }
-            const money = h * (log.bonus3k ? emp.rate + 3000 : emp.rate) * (log.x3 ? 3 : 1);
-            totalH += h; totalS += money;
+            const salary = h * (log.bonus3k ? emp.rate + 3000 : emp.rate) * (log.x3 ? 3 : 1);
+            const ship = parseFloat(log.ship) || 0;
+
+            totalH += h; 
+            totalS += salary;
+            totalShip += ship;
+
             row.querySelector('.h-cell').innerText = h > 0 ? h.toFixed(2) : '-';
-            row.querySelector('.s-cell').innerText = money > 0 ? Math.round(money).toLocaleString() : '-';
+            row.querySelector('.s-c-cell'); // Fix: Update text directly
+            row.querySelector('.s-cell').innerText = salary > 0 ? Math.round(salary).toLocaleString() : '-';
         }
+
         document.getElementById('totalH').innerText = totalH.toFixed(2);
         document.getElementById('totalS').innerText = Math.round(totalS).toLocaleString();
+        document.getElementById('totalShip').innerText = totalShip.toLocaleString();
+        document.getElementById('finalTotal').innerText = Math.round(totalS + totalShip).toLocaleString();
     }
 
-    // 4. CHỨC NĂNG SAO LƯU FILE (BACKUP & RESTORE)
     function exportData() {
         const blob = new Blob([JSON.stringify(appData)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `SAO_LUU_CHAM_CONG_${new Date().toLocaleDateString()}.json`;
+        a.href = URL.createObjectURL(blob);
+        a.download = `BLING_DATA_${new Date().toLocaleDateString()}.json`;
         a.click();
-        URL.revokeObjectURL(url);
     }
 
     function importData(event) {
@@ -239,11 +350,9 @@
                     appData = data;
                     autoSave();
                     renderEmpDropdown();
-                    alert(" Đã cập nhật lại toàn bộ thông tin giờ làm từ file!");
+                    alert("Đã cập nhật dữ liệu!");
                 }
-            } catch (err) {
-                alert("File không đúng định dạng!");
-            }
+            } catch (err) { alert("File không hợp lệ!"); }
         };
         reader.readAsText(file);
     }
