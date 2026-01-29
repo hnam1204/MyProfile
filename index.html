@@ -3,171 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hnam - Projects</title>
+    <title>hnam - Bling Coffee</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
             padding: 2rem 1rem;
             display: flex;
-            justify-content: center;
-        }
-
-        .container { width: 100%; max-width: 500px; }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Projects Panel */
-        .projects-panel {
-            background: white;
-            border-radius: 30px;
-            padding: 2rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.6s ease-out;
-        }
-
-        .projects-header {
-            display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
+            overflow: hidden;
+            position: relative;
+            background-color: #000;
         }
 
-        .projects-title { font-size: 1.5rem; font-weight: 700; color: #1a1a1a; }
-
-        .project-count {
-            background: #f0f2f5;
-            color: #667eea;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        /* Project Item */
-        .project-item {
-            background: #f8f9fa;
-            border-radius: 18px;
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
-        }
-
-        .project-item:hover {
-            background: white;
-            border-color: #667eea;
-            transform: translateX(8px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
-        }
-
-        .project-header {
+        /* 1. HIỆU ỨNG ẢNH NỀN CHẠY NGANG LIÊN TIẾP (SEAMLESS) */
+        .bg-slider-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            overflow: hidden;
             display: flex;
-            align-items: center;
-            gap: 1rem;
         }
 
-        .project-icon {
-            width: 48px; height: 48px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.2rem;
+        .image-track {
+            display: flex;
+            width: fit-content;
+            height: 100%;
+            animation: scrollImages 40s linear infinite; /* Tốc độ chạy ảnh */
+        }
+
+        .bg-img {
+            width: 100vw; /* Mỗi ảnh rộng bằng màn hình */
+            height: 100%;
+            background-size: cover;
+            background-position: center;
             flex-shrink: 0;
         }
 
-        /* Màu sắc biểu tượng riêng biệt */
-        .project-icon.orange { background: linear-gradient(135deg, #f39c12, #d35400); }
-        .project-icon.green { background: linear-gradient(135deg, #27ae60, #1e8449); }
-
-        .project-info { flex: 1; }
-
-        .project-name { font-size: 1.05rem; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
-
-        .project-desc { font-size: 0.85rem; color: #7f8c8d; line-height: 1.4; }
-
-        .project-tags {
-            display: flex; gap: 0.4rem;
-            margin-top: 0.8rem; padding-top: 0.8rem;
-            border-top: 1px dashed #ddd;
+        @keyframes scrollImages {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Chạy 50% vì nội dung được nhân đôi */
         }
 
-        .tag {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.6rem;
-            background: white;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            color: #666;
-            text-transform: uppercase;
+        /* Lớp phủ tối để nổi bật giao diện */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.4);
         }
 
-        @media (max-width: 480px) {
-            .projects-panel { padding: 1.5rem; }
-            .project-name { font-size: 1rem; }
+        .container { width: 100%; max-width: 480px; position: relative; z-index: 10; }
+
+        /* 2. CHỮ ĐÁNH MÁY */
+        .typing-container { text-align: center; margin-bottom: 2rem; height: 50px; }
+        .typing-text {
+            font-size: 1.8rem; font-weight: 800; color: white;
+            border-right: 3px solid #fff; white-space: nowrap;
+            overflow: hidden; display: inline-block;
+            animation: blink 0.7s infinite;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
         }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        /* 3. CARD DỰ ÁN */
+        .projects-panel {
+            background: rgba(0, 0, 0, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 35px; padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .projects-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .projects-title { font-size: 1.4rem; font-weight: 800; color: white; }
+
+        .project-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 22px; padding: 1.2rem; margin-bottom: 1.2rem;
+            text-decoration: none; color: white; display: block;
+            transition: all 0.4s; border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .project-item:hover { transform: scale(1.03); background: rgba(255, 255, 255, 0.2); }
+
+        .project-icon {
+            width: 50px; height: 50px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.3rem; flex-shrink: 0;
+        }
+        .project-icon.green { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .project-icon.orange { background: linear-gradient(135deg, #e67e22, #f39c12); }
+
+        .project-name { font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 4px; }
+        .project-desc { font-size: 0.85rem; color: rgba(255,255,255,0.8); }
+
+        /* 4. CHỮ CHẠY NGANG */
+        .marquee-wrapper {
+            width: 100%; margin-top: 2.5rem; overflow: hidden;
+            background: rgba(0, 0, 0, 0.6); padding: 12px 0;
+            border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .marquee-content { display: flex; white-space: nowrap; animation: marquee-move 20s linear infinite; }
+        .marquee-content span { color: white; font-size: 0.9rem; padding-right: 60px; }
+        @keyframes marquee-move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
+
+    <div class="bg-slider-container">
+        <div class="image-track" id="imageTrack">
+            <div class="bg-img" style="background-image: url('image/bling1.jpg');"></div>
+            <div class="bg-img" style="background-image: url('image/bling3.jpg');"></div>
+            <div class="bg-img" style="background-image: url('image/bling2.jpg');"></div>
+            <div class="bg-img" style="background-image: url('image/bling4.jpg');"></div>
+        </div>
+    </div>
+    <div class="bg-overlay"></div>
+
     <div class="container">
+        <div class="typing-container">
+            <div id="typing" class="typing-text"></div>
+        </div>
+
         <div class="projects-panel">
             <div class="projects-header">
-                <h2 class="projects-title">My Projects</h2>
-                <span class="project-count">Design by hnam</span>
+                <h2 class="projects-title">Tools Bling Coffee</h2>
+                <div style="background: rgba(255,255,255,0.2); color: white; padding: 4px 12px; border-radius: 10px; font-size: 0.75rem; font-weight: bold;">
+                    design by hnam
+                </div>
             </div>
 
             <a href="shipkm.html" class="project-item">
-                <div class="project-header">
-                    <div class="project-icon green">
-                        <i class="fas fa-motorcycle"></i>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="project-icon green"><i class="fas fa-shipping-fast"></i></div>
+                    <div>
+                        <div class="project-name">Bling Shipper</div>
+                        <div class="project-desc">Tính Ship & Quản lý đơn hàng</div>
                     </div>
-                    <div class="project-info">
-                        <div class="project-name">Shipper Bling Coffee</div>
-                        <div class="project-desc">Tính KM, trích bill 7% & Ghi sổ lịch sử</div>
-                    </div>
-                </div>
-                <div class="project-tags">
-                    <span class="tag">Calculator</span>
-                    <span class="tag">History</span>
                 </div>
             </a>
 
             <a href="timer.html" class="project-item">
-                <div class="project-header">
-                    <div class="project-icon orange">
-                        <i class="fas fa-user-clock"></i>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="project-icon orange"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <div class="project-name">Timer</div>
+                        <div class="project-desc">Chấm công & Tính lương NV</div>
                     </div>
-                    <div class="project-info">
-                        <div class="project-name">Quản Lý Chấm Công</div>
-                        <div class="project-desc">Tính lương, x3 lễ & Backup file</div>
-                    </div>
-                </div>
-                <div class="project-tags">
-                    <span class="tag">Lương Thưởng</span>
-                    <span class="tag">Backup JSON</span>
                 </div>
             </a>
+        </div>
+
+        <div class="marquee-wrapper">
+            <div class="marquee-content" id="marquee">
+                <span>Xin Chào, Chúc Bạn Một Ngày Vui Vẻ !</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // Hiệu ứng xuất hiện mượt mà cho từng item
-        document.querySelectorAll('.project-item').forEach((item, index) => {
-            item.style.animation = `slideIn 0.4s ease-out forwards ${index * 0.15}s`;
-            item.style.opacity = '0';
-        });
+        // --- 1. SCRIPT NHÂN ĐÔI ẢNH ĐỂ CHẠY LIÊN TỤC ---
+        const track = document.getElementById('imageTrack');
+        track.innerHTML += track.innerHTML; // Nhân đôi danh sách ảnh để tạo vòng lặp vô tận
+
+        // --- 2. TYPING EFFECT ---
+        const text = "Welcome back!";
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                document.getElementById("typing").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(type, 100);
+            }
+        }
+        
+        // --- 3. LOOP MARQUEE TEXT ---
+        const marquee = document.getElementById('marquee');
+        marquee.innerHTML += marquee.innerHTML; 
+
+        window.onload = type;
     </script>
 </body>
 </html>
